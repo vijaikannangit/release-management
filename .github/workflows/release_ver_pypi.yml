@@ -1,4 +1,4 @@
-name: Publish ${package_name} to PyPI / GitHub Actions
+name: Publish Package Release to PyPI through GitHub Actions
 
 # on:
 #   push:
@@ -8,9 +8,14 @@ on:
       - "v*"
 
 jobs:
-  build-n-publish:
+  build-n-publish to Pypi:
     name: Build and publish to PyPI
     runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/release-verchk-vijkan
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
 
     steps:
       - name: Checkout source
@@ -21,19 +26,26 @@ jobs:
         with:
           python-version: "3.x"
 
-      # - name: Build source and wheel distributions
+      # - name: Install Dependencies - Build source and wheel distributions
       #   run: |
       #     python -m pip install --upgrade build twine
       #     python -m build
       #     #twine check --strict dist/*
 
-      - name: Install pypa/build
+      - name: Install pip
         run: >-
           python -m
           pip install
           build
           --user
-    
+
+      - name: Install Setuptools
+         run: |
+            pip install setuptools wheel twine
+
+      - name: Build dist files
+          run: python setup.py sdist bdist_wheel
+
       - name: Build a binary wheel and a source tarball
         run: >-
           python -m
@@ -42,10 +54,16 @@ jobs:
           --wheel
           --outdir dist/
 
+      - name: Publish Package
+        env:
+          TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+          TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+        run: twine upload dist/*
 
       - name: Publish distribution(package) to PyPI
         if: startsWith(github.ref, 'refs/tags')
         uses: pypa/gh-action-pypi-publish@release/v1
+        #uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         with:
           user: __token__
           password: ${{ secrets.PYPI_REL_VER_MGMT_API_TOKEN }}
