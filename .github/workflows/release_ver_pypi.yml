@@ -26,11 +26,11 @@ jobs:
         with:
           python-version: "3.x"
 
-       - name: Install Dependencies - Build source and wheel distributions
-         run: |
-           python -m pip install --upgrade build twine
-           python -m build
-      #     #twine check --strict dist/*
+      - name: Install Dependencies - Build source and wheel distributions
+        run: |
+          python -m pip install --upgrade build twine
+          python -m build
+          #twine check --strict dist/*
 
       # - name: Install pip
       #   run: >-
