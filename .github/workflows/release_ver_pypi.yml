@@ -26,18 +26,18 @@ jobs:
         with:
           python-version: "3.x"
 
-      # - name: Install Dependencies - Build source and wheel distributions
-      #   run: |
-      #     python -m pip install --upgrade build twine
-      #     python -m build
+       - name: Install Dependencies - Build source and wheel distributions
+         run: |
+           python -m pip install --upgrade build twine
+           python -m build
       #     #twine check --strict dist/*
 
-      - name: Install pip
-        run: >-
-          python -m
-          pip install
-          build
-          --user
+      # - name: Install pip
+      #   run: >-
+      #     python -m
+      #     pip install
+      #     build
+      #     --user
 
       - name: Install Setuptools
         run: pip install setuptools wheel twine
@@ -45,13 +45,13 @@ jobs:
       - name: Build dist files
         run: python setup.py sdist bdist_wheel
 
-      - name: Build a binary wheel and a source tarball
-        run: >-
-          python -m
-          build
-          --sdist
-          --wheel
-          --outdir dist/
+      # - name: Build a binary wheel and a source tarball
+      #   run: >-
+      #     python -m
+      #     build
+      #     --sdist
+      #     --wheel
+      #     --outdir dist/
 
       # - name: Publish Package
       #   env:
@@ -64,8 +64,8 @@ jobs:
         uses: pypa/gh-action-pypi-publish@release/v1
         #uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
         with:
-          user: __token__
-          password: ${{ secrets.PYPI_REL_VER_MGMT_API_TOKEN }}
+          user: Vijaik
+          password: ${{ secrets.PYPI_REL_TEST }}
           repository-url: https://pypi.org/legacy/          
           #skip_existing: true
 
